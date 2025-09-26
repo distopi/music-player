@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap");
+      body {
+        font-family: "Google Sans Code", monospace;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+      }
+
+      .caixa {
+        border-radius: 15px;
+        background-color: rgb(230, 230, 230);
+        display: inline-block;
+        padding: 15px;
+      }
+
+      .circulo {
+        border-radius: 100%;
+        background-color: rgb(250, 250, 250);
+        display: inline-block;
+        padding: 15px;
+        align-content: center;
+        vertical-align: text-bottom;
+      }
+      .barra-progresso {
+        border: solid black 1px;
+        padding: 5px;
+        background-color: black;
+        width: 90%;
+        margin-bottom: 20px;
+      }
+      #Progresso {
+        border: solid blue 3px;
+
+        background-color: blue;
+      }
+      .foto {
+        border-radius: 35px;
+      }
+      #timestamp{
+          display: flex;
+          gap: 30px ;
+          justify-content: center;
+          
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="caixa">
+      <img src="moeshop.jpg" alt="" height="300px" class="foto" />
+      <center>
+        <h1>Nome da musica</h1>
+        <h2>Nome do artista</h2>
+      </center>
+      <audio id="audioPlayer">
+        <source src="Oh Lord.mp3" type="audio/mpeg" />
+        Seu navegador não suporta o elemento de áudio.
+      </audio>
+      <div id="timestamp">
+        <p id="current"></p>
+        <p>/</p>
+        <p id="final"></p>
+      </div>
+      <div class="barra-progresso">
+        <div id="Progresso"></div>
+      </div>
+      <center>
+        <div class="circulo">
+          <img src="previous.png" alt="" height="40px" />
+        </div>
+        <div class="circulo">
+          <img src="pause.png" alt="" height="40px" id="playPauseBtn" />
+        </div>
+        <div class="circulo">
+          <img src="next-button.png" alt="" height="40px" />
+        </div>
+      </center>
+    </div>
+
+    <script>
+      // Obtém os elementos HTML
+      const audioPlayer = document.getElementById("audioPlayer");
+      const playPauseBtn = document.getElementById("playPauseBtn");
+      const barraProgresso = document.getElementById("Progresso");
+      const barraContainer = document.querySelector(
+        ".barra-progresso-container"
+      );
+      const current = document.getElementById("current");
+
+      const final = document.getElementById("final");
+
+      function formatarTempo(segundos) {
+        // Calcula os minutos, arredondando para baixo
+        const minutos = Math.floor(segundos / 60);
+
+        // Calcula os segundos restantes usando o operador de módulo (%)
+        const segundosRestantes = Math.floor(segundos % 60);
+
+        // Adiciona um "0" à frente se o número for menor que 10
+        // Isso é útil para formatar valores como "05" em vez de "5"
+        const minutosFormatados = String(minutos).padStart(2, "0");
+        const segundosFormatados = String(segundosRestantes).padStart(2, "0");
+
+        return `${minutosFormatados}:${segundosFormatados}`;
+      }
+
+      let isPlaying = false;
+
+      // Evento para o botão de tocar/pausar
+      playPauseBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          audioPlayer.pause();
+          playPauseBtn.textContent = "Tocar";
+        } else {
+          audioPlayer.play();
+          playPauseBtn.textContent = "Pausar";
+        }
+        isPlaying = !isPlaying;
+      });
+
+      audioPlayer.addEventListener("timeupdate", () => {
+        current.innerText = formatarTempo(audioPlayer.currentTime);
+        final.innerText = formatarTempo(audioPlayer.duration);
+
+        let progressoPercentual =
+          (audioPlayer.currentTime * 100) / audioPlayer.duration;
+
+        barraProgresso.style.width = progressoPercentual + "%";
+      });
+    </script>
+  </body>
+</html>
